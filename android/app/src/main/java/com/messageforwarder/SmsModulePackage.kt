@@ -17,7 +17,6 @@ class SmsModulePackage : ReactPackage {
     reactContext: ReactApplicationContext
         ): MutableList<NativeModule> {
             val sharedPreferencesModule = SharedPreferencesModule(reactContext)
-            // val telegramModule = TelegramModule(sharedPreferencesModule)
             val smsModule = SmsModule(reactContext)
             return listOf(smsModule, sharedPreferencesModule).toMutableList()
 }
