@@ -22,8 +22,9 @@ class TelegramModule(private val sharedPreferencesModule: SharedPreferencesModul
         val url = URL("https://api.telegram.org/bot$botToken/sendMessage")
         val jsonInputString = """{"chat_id": "$chat_id", "text": "$message"}"""
 
-        Log.d("SmsReceiver", "Received sendMessage url: ${url} | jsonInputString: ${jsonInputString}")
-
+        if (BuildConfig.DEBUG) {
+            Log.d("SmsReceiver", "Received sendMessage url: ${url} | jsonInputString: ${jsonInputString}")
+        }
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 with(url.openConnection() as HttpURLConnection) {
@@ -37,7 +38,9 @@ class TelegramModule(private val sharedPreferencesModule: SharedPreferencesModul
                     Log.d("SmsReceiver", "Received sendMessage responseMessage: ${responseMessage}")
                 }
             } catch (e: Exception) {
-                Log.e("SmsReceiver", "Error sending message: ${e}")
+                if (BuildConfig.DEBUG) {
+                    Log.e("SmsReceiver", "Error sending message: ${e}")
+                }
             }
         }
     }
