@@ -6,6 +6,12 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Callback
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import java.lang.Exception
+import kotlin.Pair
+import kotlin.String
+import kotlin.Unit
+import kotlin.invoke
 
 class SharedPreferencesModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -23,7 +29,9 @@ class SharedPreferencesModule(reactContext: ReactApplicationContext) : ReactCont
             editor.apply()
             callback.invoke(true)
         } catch (e: Exception) {
-            callback.invoke(false)
+                FirebaseCrashlytics.getInstance().log("SharedPreferencesModule.saveDetails failed")
+                FirebaseCrashlytics.getInstance().recordException(e)
+                callback.invoke(false)
         }
     }
 

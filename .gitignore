@@ -72,3 +72,9 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+yarn.lock
+.yarn/
+.bundle/
+gradle.properties
+google-services.json
+forward-app-key.keystore

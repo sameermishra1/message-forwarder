@@ -43,6 +43,7 @@ const Settings: React.FC<SettingsProps> = ({}) => {
           label="Save"
           onPress={() => handleButtonPress()}
           style={styles.button}
+          disabled={!token || !chatID} // Disable the button if either token or chatID is empty
         />
       </View>
     </ImageBackground>

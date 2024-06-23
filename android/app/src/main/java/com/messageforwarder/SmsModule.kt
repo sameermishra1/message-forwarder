@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableArray
+import java.lang.Exception
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class SmsModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -21,24 +23,10 @@ class SmsModule(private val reactContext: ReactApplicationContext) : ReactContex
          if (ContextCompat.checkSelfPermission(reactApplicationContext, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(currentActivity!!, arrayOf(Manifest.permission.READ_SMS), 1)
             promise.reject("READ_SMS Event Error",  Exception("Permission not granted for READ_SMS"));
+            return
          }
         val messageMap = Arguments.createMap()
         val cursor = reactContext.contentResolver.query(Telephony.Sms.CONTENT_URI,arrayOf(Telephony.Sms.ADDRESS, Telephony.Sms.BODY), null, null, Telephony.Sms.Inbox.DEFAULT_SORT_ORDER)
-        // cursor?.use {
-        //    while (cursor.moveToNext()) {
-        //         val address = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS))
-        //         val body = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY))
-        //         val oldMessageArray = messageMap.getArray(address)
-        //         val messageArray = Arguments.createArray()
-        //         if (oldMessageArray != null) {
-        //             for (i in 0 until oldMessageArray.size()) {
-        //             messageArray.pushString(oldMessageArray.getString(i))
-        //         }
-        //     }
-        //         messageArray.pushString(body)
-        //         messageMap.putArray(address, messageArray)
-        //     }
-        // }
         if (cursor?.moveToFirst() == true) {
             val addressIndex = cursor.getColumnIndex(Telephony.Sms.ADDRESS)
             val bodyIndex = cursor.getColumnIndex(Telephony.Sms.BODY)
@@ -52,7 +40,8 @@ class SmsModule(private val reactContext: ReactApplicationContext) : ReactContex
             }
         }
         else {
-            promise.reject("READ_SMS Event Error",  Exception("Error reading SMS messages"));
+                FirebaseCrashlytics.getInstance().recordException(Exception("SmsModule.readSmsMessages failed.Error reading SMS messages"))            
+                promise.reject("READ_SMS Event Error",  Exception("Error reading SMS messages"));
         }
     }
 }
