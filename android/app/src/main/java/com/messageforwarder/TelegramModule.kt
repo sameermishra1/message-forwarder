@@ -7,6 +7,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.lang.Exception
+import java.lang.RuntimeException
 
 class TelegramModule(private val sharedPreferencesModule: SharedPreferencesModule) {
     fun forwardMessages(messages: Map<String, Array<String>>) {
@@ -45,7 +46,7 @@ class TelegramModule(private val sharedPreferencesModule: SharedPreferencesModul
                     outputStream.write(jsonInputString.toByteArray(Charsets.UTF_8))
                     if (BuildConfig.DEBUG) {
                         Log.d("SmsReceiver", "Received sendMessage responseCode: ${responseCode} and responseMessage: ${responseMessage}")
-                    }
+                    }  
                 }
             } catch (e: Exception) {
                 if (BuildConfig.DEBUG) {

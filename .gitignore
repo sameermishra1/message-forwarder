@@ -78,3 +78,4 @@ yarn.lock
 gradle.properties
 google-services.json
 forward-app-key.keystore
+android/gradle.properties

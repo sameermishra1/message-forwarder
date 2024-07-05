@@ -6,12 +6,12 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Callback
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.lang.Exception
 import kotlin.Pair
 import kotlin.String
 import kotlin.Unit
 import kotlin.invoke
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class SharedPreferencesModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -26,7 +26,7 @@ class SharedPreferencesModule(reactContext: ReactApplicationContext) : ReactCont
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("telegram_token", token)
             editor.putString("telegram_chatID", chatID)
-            editor.apply()
+            editor.apply()      
             callback.invoke(true)
         } catch (e: Exception) {
                 FirebaseCrashlytics.getInstance().log("SharedPreferencesModule.saveDetails failed")
