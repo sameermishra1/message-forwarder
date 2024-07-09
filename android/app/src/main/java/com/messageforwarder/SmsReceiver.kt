@@ -10,6 +10,7 @@ import com.messageforwarder.MainApplication
 import android.os.Build
 import android.util.Log
 import android.provider.Telephony
+import com.messageforwarder.mmkv.MMKVService
 
 class SmsReceiver : BroadcastReceiver() {
 
@@ -24,6 +25,9 @@ class SmsReceiver : BroadcastReceiver() {
                 val sender: String? = message.originatingAddress
                 val body: String? = message.messageBody
                 if (sender != null && body != null) {
+                    // call addOrUpdateMessage method from MMKVService and save the message
+                    val mmkv = MMKVService()
+                    mmkv.addOrUpdateMessage(sender, body, false)
                     forwardMessageToTelegram(sender, body)
                 }
             }           
@@ -37,4 +41,5 @@ class SmsReceiver : BroadcastReceiver() {
         val telegramModule = TelegramModule(MainApplication.sharedPreferencesModule)
         telegramModule.forwardMessages(mapOf(phoneNumber to arrayOf(messageText)))  
     }
+
 }

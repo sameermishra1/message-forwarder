@@ -1,59 +1,86 @@
 package com.messageforwarder
-import java.net.HttpURLConnection
-import java.net.URL
+
+import kotlinx.coroutines.*
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+import java.io.IOException
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.launch
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.lang.Exception
 import java.lang.RuntimeException
+import com.messageforwarder.SharedPreferencesModule
+import com.messageforwarder.mmkv.MMKVService
 
 class TelegramModule(private val sharedPreferencesModule: SharedPreferencesModule) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val client = OkHttpClient()
+
     fun forwardMessages(messages: Map<String, Array<String>>) {
         messages.forEach { (key, values) ->
             values.forEach { value ->
-                sendMessage("$key: $value")
+                sendMessage(key, value)
             }
         }
     }
 
-    private fun sendMessage(message: String) {
+    private fun sendMessage(sender: String, message: String) {
         val details = sharedPreferencesModule.getDetails()
-        val chat_id = details?.first
-        val botToken = details?.second
-
+        val chat_id = "123"
+        val botToken = "456"
         if (chat_id == null || botToken == null) {
             if (BuildConfig.DEBUG) {
                 Log.e("SmsReceiver", "Chat ID or Bot Token is missing.")
             }
             return // Exit the function if either value is null
-         }
-        val url = URL("https://api.telegram.org/bot$botToken/sendMessage")
-        val jsonInputString = """{"chat_id": "$chat_id", "text": "$message"}"""
-
-        if (BuildConfig.DEBUG) {
-            Log.d("SmsReceiver", "Received sendMessage url: ${url} | jsonInputString: ${jsonInputString}")
         }
-        GlobalScope.launch(Dispatchers.IO) {
+        val jsonInputString = """{"chat_id": "$chat_id", "text": "$sender" + "$message"}"""
+        val url = "https://telegramtest.free.beeceptor.com/bot$botToken/sendMessage"
+        coroutineScope.launch {
             try {
-                with(url.openConnection() as HttpURLConnection) {
-                    requestMethod = "POST"
-                    setRequestProperty("Content-Type", "application/json; utf-8")
-                    setRequestProperty("Accept", "application/json")
-                    doOutput = true
-
-                    outputStream.write(jsonInputString.toByteArray(Charsets.UTF_8))
-                    if (BuildConfig.DEBUG) {
-                        Log.d("SmsReceiver", "Received sendMessage responseCode: ${responseCode} and responseMessage: ${responseMessage}")
-                    }  
-                }
+                postData(jsonInputString, url)  
+                val mmkv = MMKVService()
+                mmkv.addOrUpdateMessage(sender, message, true)
             } catch (e: Exception) {
                 if (BuildConfig.DEBUG) {
-                    Log.e("SmsReceiver", "Error sending message: ${e}")
+                        Log.e("SmsReceiver", "Error sending message: ${e}")
                 }
                 FirebaseCrashlytics.getInstance().log("TelegramModule.sendMessage failed")
                 FirebaseCrashlytics.getInstance().recordException(e)
+            }
+        }
+       
+    }
+
+     private suspend fun postData(data: String, url: String) = withContext(Dispatchers.IO) {
+
+        if (BuildConfig.DEBUG) {
+            Log.d("SmsReceiver", "Received sendMessage url: ${url} | jsonInputString: ${data}")
+        }
+        val json = JSONObject()
+        json.put("data", data)
+
+        val body = json.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
+
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Content-Type", "application/json; utf-8")
+            .addHeader("Accept", "application/json")
+            .post(body)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) 
+            { 
+                throw IOException("Unexpected code $response")
+            }    
+            if (BuildConfig.DEBUG) {
+                Log.d("SmsReceiver", "Received sendMessage response: ${response}")
             }
         }
     }
