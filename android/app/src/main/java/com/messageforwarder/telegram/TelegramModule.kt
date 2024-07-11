@@ -1,4 +1,4 @@
-package com.messageforwarder
+package com.messageforwarder.telegram
 
 import kotlinx.coroutines.*
 import okhttp3.*
@@ -16,6 +16,7 @@ import java.lang.Exception
 import java.lang.RuntimeException
 import com.messageforwarder.SharedPreferencesModule
 import com.messageforwarder.mmkv.MMKVService
+import com.messageforwarder.BuildConfig
 
 class TelegramModule(private val sharedPreferencesModule: SharedPreferencesModule) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -31,16 +32,16 @@ class TelegramModule(private val sharedPreferencesModule: SharedPreferencesModul
 
     private fun sendMessage(sender: String, message: String) {
         val details = sharedPreferencesModule.getDetails()
-        val chat_id = "123"
-        val botToken = "456"
+        val chat_id = details?.first
+        val botToken = details?.second
         if (chat_id == null || botToken == null) {
             if (BuildConfig.DEBUG) {
                 Log.e("SmsReceiver", "Chat ID or Bot Token is missing.")
             }
             return // Exit the function if either value is null
         }
-        val jsonInputString = """{"chat_id": "$chat_id", "text": "$sender" + "$message"}"""
-        val url = "https://telegramtest.free.beeceptor.com/bot$botToken/sendMessage"
+        val jsonInputString = """{"chat_id": "$chat_id", "text": "$sender: $message"}"""
+        val url = "https://api.telegram.org/bot$botToken/sendMessage"
         coroutineScope.launch {
             try {
                 postData(jsonInputString, url)  
@@ -62,11 +63,7 @@ class TelegramModule(private val sharedPreferencesModule: SharedPreferencesModul
         if (BuildConfig.DEBUG) {
             Log.d("SmsReceiver", "Received sendMessage url: ${url} | jsonInputString: ${data}")
         }
-        val json = JSONObject()
-        json.put("data", data)
-
-        val body = json.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
-
+        val body = data.toRequestBody("application/json; charset=utf-8".toMediaType())
         val request = Request.Builder()
             .url(url)
             .addHeader("Content-Type", "application/json; utf-8")

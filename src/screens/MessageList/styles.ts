@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   messageText: {
-    padding: 20,
+    marginLeft: 10,
     fontSize: 16,
   },
   modalContainer: {

@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.telephony.SmsMessage
-import com.messageforwarder.TelegramModule
+import com.messageforwarder.telegram.TelegramModule
 import com.messageforwarder.MainApplication
 import android.os.Build
 import android.util.Log

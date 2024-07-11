@@ -43,4 +43,22 @@ class MMKVService {
             null
         }
     }
+
+    //function to get first 10 messages
+   // Function to get first 10 messages
+    fun getFirstTenMessages(): String {
+        val messages = mutableListOf<SenderMessages>()
+        val keys = mmkv.allKeys()
+        
+        keys?.forEach { key ->
+            val type = object : TypeToken<SenderMessages>() {}.type
+            val json = mmkv.decodeString(key)
+            val senderMessages: SenderMessages = gson.fromJson(json, type)
+            messages.add(senderMessages)
+        }
+        
+        // Sort messages by the timestamp of the last message in each SenderMessages
+        val firstTenMessages = messages.take(10)
+        return gson.toJson(firstTenMessages)
+    }
 }

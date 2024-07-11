@@ -6,6 +6,8 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Callback
 import com.messageforwarder.mmkv.MMKVService
 import com.tencent.mmkv.MMKV
+import java.lang.Exception
+import com.facebook.react.bridge.Promise
 
 class MMKVModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     
@@ -34,5 +36,14 @@ class MMKVModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         val mmkvService = MMKVService()
         val message = mmkvService.getItem(sender)
         callback.invoke(null, message)
+    }
+
+    //function to get first 10 messages
+    @ReactMethod
+    fun getFirstTenMessages(promise: Promise) {
+        // call MMKVService.getFirstTenMessages to get the first 10 messages
+        val mmkvService = MMKVService()
+        val messages = mmkvService.getFirstTenMessages()
+        promise.resolve(messages)
     }
 }
