@@ -3,15 +3,15 @@
 ## Introduction
 
 Thank you for using the app!
-This document is the privacy policy for **Forwarder (Message Forwarder)* Android app. 
+This document is the privacy policy for **Forwarder (Message Forwarder)** Android app. 
 
-## What information are eventually collected
+## What information is collected?
 
 - Information about your devices, which can be: model, version, operating system, unique device number, etc.
 - Crash logs, which are automatically collected in case of application crash.
 - Anonimously collected analytics, which are used to improve the application and user experience.
 
-## Why these data are collect and how are they used
+## Why is the information collected?
 
 - To improve user experience by using the insights generated from analytics data collected.
 - Monitoring the use of the application to detect, prevent and solve technical problems.
