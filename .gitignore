@@ -79,3 +79,4 @@ gradle.properties
 google-services.json
 forward-app-key.keystore
 android/gradle.properties
+android/gradle.properties.production
