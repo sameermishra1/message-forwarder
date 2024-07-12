@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, Button, PermissionsAndroid, Platform} from 'react-native';
 import styles from './styles';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const RequestPermission = () => {
   const requestSMSPermission = async () => {
@@ -24,7 +25,8 @@ const RequestPermission = () => {
           // Permission denied: handle accordingly
         }
       } catch (err) {
-        console.warn(err);
+        console.error('Something went wrong. Try again later!');
+        crashlytics().recordError(err);
       }
     }
   };

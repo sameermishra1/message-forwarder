@@ -11,6 +11,8 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
 import com.facebook.react.bridge.ReactApplicationContext
+import com.tencent.mmkv.MMKV
+import android.util.Log
 
 class MainApplication : Application(), ReactApplication {
 
@@ -40,9 +42,14 @@ class MainApplication : Application(), ReactApplication {
   override fun onCreate() {
     super.onCreate()
     sharedPreferencesModule = SharedPreferencesModule(ReactApplicationContext(this))
+    val rootDir = MMKV.initialize(this)
+    if (BuildConfig.DEBUG) {
+      Log.d("MMKV", "mmkv root: $rootDir")        
+    }
     SoLoader.init(this, false)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       load()
     }
+    
   }
 }

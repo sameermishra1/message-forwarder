@@ -7,6 +7,8 @@ import Message from '../../models/Message';
 import SenderMessages from '../../models/SenderMessages';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../Navigation';
+import crashlytics from '@react-native-firebase/crashlytics';
+
 type MessagesScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'MessageList'
@@ -22,7 +24,6 @@ const Messages: React.FC = () => {
     const fetchMessages = async () => {
       try {
         const response = await MMKVModule.getFirstTenMessages();
-        console.log('Fetched messages:', response);
         const fetchedMessages = JSON.parse(response);
         const senderMessagesArray = fetchedMessages
           .filter(
@@ -47,17 +48,17 @@ const Messages: React.FC = () => {
               return new SenderMessages(item.sender, transformedMessages);
             },
           );
-        console.log('tranformed response:', senderMessagesArray);
         setMessages(senderMessagesArray);
       } catch (error) {
-        console.error('Error fetching messages:', error);
+        console.error('Something went wrong. Try again later!');
+        crashlytics().recordError(error);
       }
     };
     fetchMessages();
   }, []);
 
   const handlePress = (senderMessage: SenderMessages) => {
-    navigation.navigate('MessageList', {senderMessage: senderMessage});
+    navigation.navigate('Message', {senderMessage: senderMessage});
   };
 
   return (

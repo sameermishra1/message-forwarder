@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.os.Bundle
-import com.tencent.mmkv.MMKV
 import android.util.Log
 
 class MainActivity : ReactActivity() {
@@ -39,10 +38,6 @@ class MainActivity : ReactActivity() {
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), 1)
         }
-        val rootDir = MMKV.initialize(this)
-        if (BuildConfig.DEBUG) {
-                Log.d("MMKV", "mmkv root: $rootDir")        
-            }
        
     }
 
