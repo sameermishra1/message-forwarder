@@ -58,3 +58,13 @@ This is one way to run your app — you can also run it directly from within And
 adb logcat -s "SmsReceiver"  
 ```
 
+# Useful Commands
+```bash
+# create production release build and deploy to emulator or physical device connected via usb
+npx react-native run-android --mode release 
+# to uninstall the app from the device
+adb -s <DEVICE_ID> uninstall com.messageforwarder 
+# to scan the logs for relevant information
+adb -s <DEVICE_ID>  logcat | grep "SmsReceiver"
+
+```
