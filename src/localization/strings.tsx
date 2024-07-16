@@ -18,6 +18,13 @@ const strings = {
   darkMode: 'Dark Mode',
   welcome: 'Welcome',
   analyticsConsent: 'Analytics Consent',
+  accessibilityLabels: {
+    analyticsConsent: 'Analytics Consent',
+    darkMode: 'Dark Mode',
+  },
+  Messages: {
+    noMessagesFound: 'No messages found',
+  },
 };
 
 export default strings;

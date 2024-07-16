@@ -66,5 +66,9 @@ npx react-native run-android --mode release
 adb -s <DEVICE_ID> uninstall com.messageforwarder 
 # to scan the logs for relevant information
 adb -s <DEVICE_ID>  logcat | grep "SmsReceiver"
+# create production release bundle
+cd android
+./gradlew assembleRelease # for APK
+./gradlew bundleRelease # for AAB
 
 ```

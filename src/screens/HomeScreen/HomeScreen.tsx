@@ -159,6 +159,7 @@ export default function HomeScreen({
           <Switch
             value={crashlyticsConsent}
             onValueChange={toggleCrashlyticsConsent}
+            accessibilityLabel={strings.accessibilityLabels.analyticsConsent}
           />
         </View>
         <View style={homeScreenStyles.darkModeContainer}>
@@ -172,6 +173,7 @@ export default function HomeScreen({
           <Switch
             value={isDarkMode}
             onValueChange={() => setIsDarkMode(!isDarkMode)}
+            accessibilityLabel={strings.accessibilityLabels.darkMode}
           />
         </View>
       </View>

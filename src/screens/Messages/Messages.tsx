@@ -10,6 +10,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../Navigation';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {NativeModules} from 'react-native';
+import strings from '../../localization/strings';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -80,13 +81,25 @@ const Messages: React.FC = () => {
         messageListStyles.container,
         {backgroundColor: theme.colors.background},
       ]}>
-      <FlatList
-        data={messages}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        style={messageListStyles.list}
-        contentContainerStyle={messageListStyles.listContent}
-      />
+      {!messages || messages.length === 0 ? (
+        <>
+          <Text
+            style={[
+              messageListStyles.noMessagesFound,
+              {color: theme.colors.onBackground},
+            ]}>
+            {strings.Messages.noMessagesFound}
+          </Text>
+        </>
+      ) : (
+        <FlatList
+          data={messages}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          style={messageListStyles.list}
+          contentContainerStyle={messageListStyles.listContent}
+        />
+      )}
     </View>
   );
 };

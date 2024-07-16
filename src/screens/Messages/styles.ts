@@ -34,4 +34,9 @@ export const messageListStyles = StyleSheet.create({
   icon: {
     fontSize: 24,
   },
+  noMessagesFound: {
+    fontSize: 18,
+    marginTop: 8,
+    marginBottom: 8,
+  },
 });
