@@ -69,11 +69,11 @@ export default function HomeScreen({
   const checkAndRequestReadSMSPermission = async () => {
     if (Platform.OS === 'android') {
       const hasPermission = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.READ_SMS,
+        PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
       );
       if (!hasPermission) {
         const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_SMS,
+          PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
           {
             title: strings.readSmsPermission.title,
             message: strings.readSmsPermission.message,
@@ -109,7 +109,7 @@ export default function HomeScreen({
 
   const requestReadSMSPermission = async () => {
     const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.READ_SMS,
+      PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
       {
         title: strings.readSmsPermission.title,
         message: strings.readSmsPermission.message,
