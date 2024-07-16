@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, NativeModules, TouchableOpacity} from 'react-native';
-import styles from './styles';
-import {ImageBackground} from 'react-native';
+import {View, FlatList, TouchableOpacity} from 'react-native';
+import {Text, useTheme} from 'react-native-paper';
+
+import {messageListStyles} from './styles';
 import {useNavigation} from '@react-navigation/native';
 import Message from '../../models/Message';
 import SenderMessages from '../../models/SenderMessages';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../Navigation';
 import crashlytics from '@react-native-firebase/crashlytics';
+import {NativeModules} from 'react-native';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -19,6 +21,21 @@ const {MMKVModule} = NativeModules;
 const Messages: React.FC = () => {
   const navigation = useNavigation<MessagesScreenNavigationProp>();
   const [messages, setMessages] = useState<SenderMessages[]>([]);
+  const theme = useTheme();
+
+  const renderItem = ({item}: {item: SenderMessages}) => (
+    <TouchableOpacity
+      style={messageListStyles.messageRow}
+      onPress={() => navigation.navigate('Message', {senderMessage: item})}>
+      <Text style={messageListStyles.senderName}>{item.sender}</Text>
+      <Text
+        style={messageListStyles.messageText}
+        numberOfLines={1}
+        ellipsizeMode="tail">
+        {item.messages[0].text}
+      </Text>
+    </TouchableOpacity>
+  );
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -57,29 +74,20 @@ const Messages: React.FC = () => {
     fetchMessages();
   }, []);
 
-  const handlePress = (senderMessage: SenderMessages) => {
-    navigation.navigate('Message', {senderMessage: senderMessage});
-  };
-
   return (
-    <ImageBackground
-      source={require('../../../assets/background.jpg')}
-      style={styles.backgroundImage}>
-      <View>
-        {messages.map((senderMessage, senderIndex) => (
-          <TouchableOpacity
-            key={senderIndex}
-            onPress={() => handlePress(senderMessage)}>
-            <View style={styles.senderContainer}>
-              <Text style={styles.senderText}>{senderMessage.sender}</Text>
-              <Text numberOfLines={1} style={styles.messageText}>
-                {senderMessage.messages[0].text}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </ImageBackground>
+    <View
+      style={[
+        messageListStyles.container,
+        {backgroundColor: theme.colors.background},
+      ]}>
+      <FlatList
+        data={messages}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        style={messageListStyles.list}
+        contentContainerStyle={messageListStyles.listContent}
+      />
+    </View>
   );
 };
 

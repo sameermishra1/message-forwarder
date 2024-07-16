@@ -1,54 +1,37 @@
 import {StyleSheet} from 'react-native';
-import ScreenStyles from '../../styles/ScreenStyles';
 
-const styles = StyleSheet.create({
-  ...ScreenStyles,
-  key: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: 'black',
+export const messageListStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
   },
-  senderContainer: {
-    marginBottom: 20,
-    marginLeft: 10,
-  },
-  senderText: {
+  title: {
+    fontSize: 32,
     fontWeight: 'bold',
-    fontSize: 24,
+    marginBottom: 24,
+    textAlign: 'center',
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    flexGrow: 1,
+    justifyContent: 'flex-end', // This will align the content to the bottom
+  },
+  messageRow: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  senderName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
   },
   messageText: {
-    padding: 20,
     fontSize: 16,
   },
-  modalContainer: {
-    flex: 1,
-    padding: 20,
-  },
-  modalSenderText: {
-    fontWeight: 'bold',
+  icon: {
     fontSize: 24,
   },
-  modalMessageText: {
-    marginVertical: 16,
-  },
-  messageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  syncIcon: {
-    marginRight: 10,
-  },
-  modalMessageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  closeButton: {
-    marginTop: 20,
-  },
-  closeButtonText: {
-    color: 'blue',
-  },
 });
-
-export default styles;

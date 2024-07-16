@@ -44,7 +44,6 @@ class MMKVService {
         }
     }
 
-    //function to get first 10 messages
    // Function to get first 10 messages
     fun getFirstTenMessages(): String {
         val messages = mutableListOf<SenderMessages>()

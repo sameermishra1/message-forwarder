@@ -6,27 +6,44 @@ import Settings from './screens/Settings/Settings';
 import Messages from './screens/Messages/Messages';
 import MessageList from './screens/MessageList/MessageList';
 import SenderMessages from './models/SenderMessages';
+import {NavigationStyles} from './styles/ScreenStyles';
+
 const Stack = createStackNavigator();
 
-const Navigation: React.FC = () => {
+interface NavigationProps {
+  isDarkMode: boolean;
+  setIsDarkMode: (isDark: boolean) => void;
+}
+
+export default function Navigation({
+  isDarkMode,
+  setIsDarkMode,
+}: NavigationProps) {
+  const styles = NavigationStyles(isDarkMode);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{headerShown: false}}
-        />
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: styles.header,
+          headerTintColor: styles.headerTint.color,
+        }}>
+        <Stack.Screen name="Home" options={{title: 'Home'}}>
+          {props => (
+            <HomeScreen
+              {...props}
+              isDarkMode={isDarkMode}
+              setIsDarkMode={setIsDarkMode}
+            />
+          )}
+        </Stack.Screen>
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="Message" component={MessageList} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
-
-export default Navigation;
-
+}
 export type RootStackParamList = {
   MessageList: {senderMessage: SenderMessages};
 };

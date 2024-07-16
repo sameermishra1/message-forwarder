@@ -14,6 +14,7 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableArray
 import java.lang.Exception
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
 
 class SmsModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -43,5 +44,21 @@ class SmsModule(private val reactContext: ReactApplicationContext) : ReactContex
                 FirebaseCrashlytics.getInstance().recordException(Exception("SmsModule.readSmsMessages failed.Error reading SMS messages"))            
                 promise.reject("READ_SMS Event Error",  Exception("Error reading SMS messages"));
         }
+    }
+
+    @ReactMethod
+    fun giveConsentForCrashlytics(promise: Promise) {
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        val firebaseAnalytics = FirebaseAnalytics.getInstance(reactApplicationContext)
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true)
+        promise.resolve("Crashlytics consent given")
+    }
+
+    @ReactMethod
+    fun revokeConsentForCrashlytics(promise: Promise) {
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(false)
+        val firebaseAnalytics = FirebaseAnalytics.getInstance(reactApplicationContext)
+        firebaseAnalytics.setAnalyticsCollectionEnabled(false)
+        promise.resolve("Crashlytics consent revoked")
     }
 }
