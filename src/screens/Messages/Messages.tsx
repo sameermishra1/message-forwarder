@@ -47,7 +47,7 @@ const Messages: React.FC = () => {
           .filter(
             (sender: {
               sender: string;
-              messages: {isSyncedWithTelegram: boolean; text: string}[];
+              messages: {isSynced: boolean; text: string}[];
             }) =>
               sender.sender &&
               sender.sender.trim() !== '' &&
@@ -56,12 +56,12 @@ const Messages: React.FC = () => {
           )
           .map(
             (item: {
-              messages: {isSyncedWithTelegram: boolean; text: string}[];
+              messages: {isSynced: boolean; text: string}[];
               sender: string;
             }) => {
               const transformedMessages = item.messages.map(
-                (msg: {isSyncedWithTelegram: boolean; text: string}) =>
-                  new Message(msg.isSyncedWithTelegram, msg.text),
+                (msg: {isSynced: boolean; text: string}) =>
+                  new Message(msg.isSynced, msg.text),
               );
               return new SenderMessages(item.sender, transformedMessages);
             },

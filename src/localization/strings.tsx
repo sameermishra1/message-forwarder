@@ -2,7 +2,7 @@ const strings = {
   readSmsPermission: {
     title: 'Read SMS Permission',
     message:
-      'This app needs access to your SMS messages to work properly. App reads all the messages and forward the message to the Telegram channel provided by you. In case no or incorrect Telegram channel credentials are provided, no messages will be forwarded. App does not share messages with any other 3rd party.',
+      'This app needs access to your SMS messages to work properly. App reads all the messages and forward the message to the endpoint and chat id provided by you. In case no or incorrect details are provided, no messages will be forwarded. App does not share messages with any other 3rd party.',
     buttonNeutral: 'Ask Me Later',
     buttonNegative: 'Cancel',
     buttonPositive: 'OK',
@@ -15,6 +15,8 @@ const strings = {
   buttonMessages: 'Messages',
   buttonSettings: 'Settings',
   requestSmsPermission: 'Request Permission',
+  privacyPolicy: 'Privacy Policy',
+  privacyPolicyUrl: 'https://sites.google.com/view/forwardapp/home',
   darkMode: 'Dark Mode',
   welcome: 'Welcome',
   analyticsConsent: 'Analytics Consent',

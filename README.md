@@ -1,7 +1,7 @@
 # Project Title
 
-Message Forwarder android app that forwards the sms messages from phone from to a telegram channels. User has to provide the telegram channel id and token for forwarding the messages.
-App uses the SMS Retriever API to get the sms messages from the phone and then forwards the messages to the telegram channel, app needs to be running in the background to forward the messages and requires the user to provide the permission to read the sms messages.
+Message Forwarder android app that forwards the sms messages from phone from to an Endpoint and chat id . User has to provide the Endpoint and chat id for forwarding the messages.
+App uses the SMS Retriever API to get the sms messages from the phone and then forwards the messages to the Endpoint and chat id, app needs to be running in the background to forward the messages and requires the user to provide the permission to read the sms messages.
 
 # Getting Started
 ## Step 1: Code setup

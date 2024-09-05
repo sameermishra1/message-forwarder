@@ -10,35 +10,39 @@ interface SettingsProps {}
 const Settings: React.FC<SettingsProps> = ({}) => {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [token, setToken] = useState<string>('');
+  const [endpoint, setEndpoint] = useState<string>('');
   const [chatID, setChatID] = useState<string>('');
   const theme = useTheme();
 
   const handleButtonPress = () => {
-    SharedPreferencesModule.saveDetails(token, chatID, (success: boolean) => {
-      if (success) {
-        setToken('');
-        setChatID('');
-        setSnackbarMessage('Data saved successfully!');
-      } else {
-        setSnackbarMessage('Failed to save data. Please try again.');
-      }
-      setSnackbarVisible(true);
-    });
+    SharedPreferencesModule.saveDetails(
+      endpoint,
+      chatID,
+      (success: boolean) => {
+        if (success) {
+          setEndpoint('');
+          setChatID('');
+          setSnackbarMessage('Data saved successfully!');
+        } else {
+          setSnackbarMessage('Failed to save data. Please try again.');
+        }
+        setSnackbarVisible(true);
+      },
+    );
   };
 
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.background}]}>
       <TextInput
-        placeholder="Enter Telegram Token"
-        value={token}
-        onChangeText={setToken}
+        placeholder="Enter Endpoint"
+        value={endpoint}
+        onChangeText={setEndpoint}
         style={styles.input}
         theme={{fonts: {regular: {fontFamily: 'System'}}}}
       />
       <TextInput
-        placeholder="Enter Telegram Chat ID"
+        placeholder="Enter Chat ID"
         value={chatID}
         onChangeText={setChatID}
         style={styles.input}
@@ -48,7 +52,7 @@ const Settings: React.FC<SettingsProps> = ({}) => {
         mode="contained"
         onPress={() => handleButtonPress()}
         style={styles.button}
-        disabled={!token || !chatID}
+        disabled={!endpoint || !chatID}
         contentStyle={styles.buttonContent}
         labelStyle={styles.buttonLabel}>
         Save

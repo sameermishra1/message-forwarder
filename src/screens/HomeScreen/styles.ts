@@ -6,6 +6,16 @@ export const styles = StyleSheet.create({
   topMargin: {
     marginTop: 10,
   },
+  bottomContainer: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
+  },
+  link: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
 });
 
 export const homeScreenStyles = StyleSheet.create({

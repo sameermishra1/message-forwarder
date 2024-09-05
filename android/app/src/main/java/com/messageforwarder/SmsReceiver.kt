@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.telephony.SmsMessage
-import com.messageforwarder.telegram.TelegramModule
+import com.messageforwarder.sync.PushModule
 import com.messageforwarder.MainApplication
 import android.os.Build
 import android.util.Log
@@ -28,18 +28,18 @@ class SmsReceiver : BroadcastReceiver() {
                     // call addOrUpdateMessage method from MMKVService and save the message
                     val mmkv = MMKVService()
                     mmkv.addOrUpdateMessage(sender, body, false)
-                    forwardMessageToTelegram(sender, body)
+                    forwardMessage(sender, body)
                 }
             }           
         }
     }
     
-    private fun forwardMessageToTelegram(phoneNumber: String, messageText: String) {
+    private fun forwardMessage(phoneNumber: String, messageText: String) {
         if (BuildConfig.DEBUG) {
-            Log.d("SmsReceiver", "Received forwardMessageToTelegram: ${messageText}")
+            Log.d("SmsReceiver", "Received forwardMessage: ${messageText}")
         }
-        val telegramModule = TelegramModule(MainApplication.sharedPreferencesModule)
-        telegramModule.forwardMessages(mapOf(phoneNumber to arrayOf(messageText)))  
+        val pushModule = PushModule(MainApplication.sharedPreferencesModule)
+        pushModule.pushMessages(mapOf(phoneNumber to arrayOf(messageText)))  
     }
 
 }

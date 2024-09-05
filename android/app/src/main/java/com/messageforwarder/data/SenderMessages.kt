@@ -2,7 +2,7 @@ package com.messageforwarder.data
 
 data class Message(
     val text: String,
-    var isSyncedWithTelegram: Boolean = false
+    var isSynced: Boolean = false
 )
 
 data class SenderMessages(

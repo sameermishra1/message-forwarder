@@ -26,6 +26,10 @@ const SettingsIcon = () => (
   />
 );
 
+const LinkIcon = () => (
+  <MaterialCommunityIcons name="link" style={homeScreenStyles.icon} />
+);
+
 const {SmsModule} = NativeModules;
 
 type RootStackParamList = {
@@ -137,6 +141,9 @@ export default function HomeScreen({
     }
     setIsReadPermissionGranted(granted === PermissionsAndroid.RESULTS.GRANTED);
   };
+  const openPrivacyPolicy = () => {
+    Linking.openURL(strings.privacyPolicyUrl);
+  };
   return (
     <View
       style={[
@@ -206,6 +213,15 @@ export default function HomeScreen({
               labelStyle={homeScreenStyles.buttonLabel}>
               {strings.buttonSettings}
             </Button>
+            <Button
+              mode="contained"
+              icon={LinkIcon}
+              onPress={openPrivacyPolicy}
+              style={homeScreenStyles.button}
+              contentStyle={homeScreenStyles.buttonContent}
+              labelStyle={homeScreenStyles.buttonLabel}>
+              {strings.privacyPolicy}
+            </Button>
           </View>
         </>
       ) : (
@@ -223,6 +239,9 @@ export default function HomeScreen({
               {color: theme.colors.onBackground},
             ]}>
             {strings.readSmsPermission.message}
+            <Text style={styles.link} onPress={openPrivacyPolicy}>
+              {strings.privacyPolicy}
+            </Text>
           </Text>
           <View style={styles.topMargin}>
             <Button

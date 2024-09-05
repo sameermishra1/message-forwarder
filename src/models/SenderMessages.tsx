@@ -6,8 +6,8 @@ class SenderMessages {
   constructor(sender: string, messages: Message[]) {
     this.sender = sender;
     this.messages = messages.map(
-      (msg: {isSyncedWithTelegram: boolean; text: string}) =>
-        new Message(msg.isSyncedWithTelegram, msg.text),
+      (msg: {isSynced: boolean; text: string}) =>
+        new Message(msg.isSynced, msg.text),
     );
   }
 }

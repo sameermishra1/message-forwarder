@@ -1,8 +1,8 @@
 class Message {
-  isSyncedWithTelegram: boolean;
+  isSynced: boolean;
   text: string;
-  constructor(isSyncedWithTelegram: boolean, text: string) {
-    this.isSyncedWithTelegram = isSyncedWithTelegram;
+  constructor(isSynced: boolean, text: string) {
+    this.isSynced = isSynced;
     this.text = text;
   }
 }

@@ -21,7 +21,7 @@ class MMKVService {
         }
         val existingMessage = senderMessages.messages.find { it.text == messageText }
         if (existingMessage != null) {
-            existingMessage.isSyncedWithTelegram = isSynced
+            existingMessage.isSynced = isSynced
         } else {
             senderMessages.messages.add(Message(messageText, isSynced))
         }

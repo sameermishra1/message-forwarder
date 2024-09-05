@@ -1,4 +1,4 @@
-package com.messageforwarder.telegram
+package com.messageforwarder.sync
 
 import kotlinx.coroutines.*
 import okhttp3.*
@@ -18,40 +18,39 @@ import com.messageforwarder.SharedPreferencesModule
 import com.messageforwarder.mmkv.MMKVService
 import com.messageforwarder.BuildConfig
 
-class TelegramModule(private val sharedPreferencesModule: SharedPreferencesModule) {
+class PushModule(private val sharedPreferencesModule: SharedPreferencesModule) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private val client = OkHttpClient()
 
-    fun forwardMessages(messages: Map<String, Array<String>>) {
+    fun pushMessages(messages: Map<String, Array<String>>) {
         messages.forEach { (key, values) ->
             values.forEach { value ->
-                sendMessage(key, value)
+                pushMessage(key, value)
             }
         }
     }
 
-    private fun sendMessage(sender: String, message: String) {
+    private fun pushMessage(sender: String, message: String) {
         val details = sharedPreferencesModule.getDetails()
         val chat_id = details?.first
-        val botToken = details?.second
-        if (chat_id == null || botToken == null) {
+        val endpoint = details?.second
+        if (chat_id == null || endpoint == null) {
             if (BuildConfig.DEBUG) {
-                Log.e("SmsReceiver", "Chat ID or Bot Token is missing.")
+                Log.e("SmsReceiver", "Chat ID or endpoint is missing.")
             }
             return // Exit the function if either value is null
         }
         val jsonInputString = """{"chat_id": "$chat_id", "text": "$sender: $message"}"""
-        val url = "https://api.telegram.org/bot$botToken/sendMessage"
         coroutineScope.launch {
             try {
-                postData(jsonInputString, url)  
+                postData(jsonInputString, endpoint)  
                 val mmkv = MMKVService()
                 mmkv.addOrUpdateMessage(sender, message, true)
             } catch (e: Exception) {
                 if (BuildConfig.DEBUG) {
                         Log.e("SmsReceiver", "Error sending message: ${e}")
                 }
-                FirebaseCrashlytics.getInstance().log("TelegramModule.sendMessage failed")
+                FirebaseCrashlytics.getInstance().log("PushModule.sendMessage failed")
                 FirebaseCrashlytics.getInstance().recordException(e)
             }
         }

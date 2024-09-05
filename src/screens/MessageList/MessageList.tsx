@@ -30,7 +30,7 @@ const MessageList = () => {
   const renderItem = ({item}: {item: Message}) => (
     <TouchableOpacity style={messageListStyles.messageRow}>
       <View style={styles.iconAndTextContainer}>
-        {item.isSyncedWithTelegram ? (
+        {item.isSynced ? (
           <>
             <SyncedIcon />
           </>
